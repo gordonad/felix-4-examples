@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+          http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.packtpub.felix</groupId>
+        <artifactId>com.packtpub.felix.ch09</artifactId>
+        <version>4.0.0</version>
+    </parent>
+
+    <artifactId>com.packtpub.felix.ch09.bookshelf-service</artifactId>
+
+    <packaging>bundle</packaging>
+
+    <name>Felix 4.0 | 09 | Bookshelf Service</name>
+    <description>Provides the business logic tier functionality for the Bookshelf Service
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.packtpub.felix</groupId>
+            <artifactId>
+                com.packtpub.felix.ch05.bookshelf-inventory-api
+            </artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Category>sample</Bundle-Category>
+                        <Bundle-SymbolicName>${artifactId}</Bundle-SymbolicName>
+                        <Export-Package>
+                            com.packtpub.felix.bookshelf.service.api,com.packtpub.felix.bookshelf.service.impl
+                        </Export-Package>
+                    </instructions>
+                    <remoteOBR>repo-rel</remoteOBR>
+                    <prefixUrl>file:///code/projects/felixbook/releases</prefixUrl>
+                    <ignoreLock>true</ignoreLock>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-ipojo-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>ipojo-bundle</goal>
+                        </goals>
+                        <configuration>
+                            <metadata>src/main/ipojo/meta.xml</metadata>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

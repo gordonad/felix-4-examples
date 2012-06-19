@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+          http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.packtpub.felix</groupId>
+        <artifactId>com.packtpub.felix.ch09</artifactId>
+        <version>4.0.0</version>
+    </parent>
+
+    <artifactId>com.packtpub.felix.ch09.bookshelf-service-tui</artifactId>
+    <name>Felix 4.0 | 09 | Bookshelf Service Gogo commands</name>
+    <packaging>bundle</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.packtpub.felix</groupId>
+            <artifactId>com.packtpub.felix.ch07.bookshelf-service</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Category>sample</Bundle-Category>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>
+                            com.packtpub.felix.bookshelf.service.tui
+                        </Export-Package>
+                        <!--
+                                   <Bundle-Activator>
+                                       com.packtpub.felix.bookshelf.service.tui.activator.BookshelfTuiActivator
+                       </Bundle-Activator>
+                                   <Private-Package>
+                                       com.packtpub.felix.bookshelf.service.tui.activator
+                       </Private-Package>
+                        -->
+                    </instructions>
+                    <remoteOBR>repo-rel</remoteOBR>
+                    <prefixUrl>file:///code/projects/felixbook/releases</prefixUrl>
+                    <ignoreLock>true</ignoreLock>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-ipojo-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>ipojo-bundle</goal>
+                        </goals>
+                        <configuration>
+                            <metadata>src/main/ipojo/meta.xml</metadata>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

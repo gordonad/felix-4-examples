@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+          http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.packtpub.felix</groupId>
+        <artifactId>com.packtpub.felix.ch06</artifactId>
+        <version>4.0.0</version>
+    </parent>
+
+  <artifactId>com.packtpub.felix.ch06.bookshelf-service</artifactId>
+  <packaging>bundle</packaging>
+
+  <name>Felix 4.0 | 06 | Bookshelf Service</name>
+  <description>The Bookshelf service</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.packtpub.felix</groupId>
+      <artifactId>com.packtpub.felix.ch04.bookshelf-inventory-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-Category>sample</Bundle-Category>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Activator>com.packtpub.felix.bookshelf.service.impl.BookshelfServiceImplActivator
+            </Bundle-Activator>
+            <Export-Package>com.packtpub.felix.bookshelf.service.api,
+            com.packtpub.felix.bookshelf.service.impl
+            </Export-Package>
+          </instructions>
+          <obrRepository>file:///code/projects/felixbook/dev</obrRepository>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
