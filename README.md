@@ -1,5 +1,5 @@
-Felix Examples from Felix 3 book
-================================
+Examples from OSGi and Felix 3 Book
+===================================
 
 The book is very dated and disappointing.
 
