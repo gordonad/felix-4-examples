@@ -1,17 +1,17 @@
 <ipojo>
-  <component classname="com.packt.felixguide.bookshelf.servlet.BookshelfServletImpl"
-    immediate="true">
-    
-    <provides>
-      <property name="alias" field="alias" />
-    </provides>
+    <component classname="com.packt.felixguide.bookshelf.servlet.BookshelfServletImpl"
+               immediate="true">
 
-    <requires field="service" />
-    <requires field="log" />
+        <provides>
+            <property name="alias" field="alias"/>
+        </provides>
 
-  </component>
+        <requires field="service"/>
+        <requires field="log"/>
 
-  <instance component="com.packt.felixguide.bookshelf.servlet.BookshelfServletImpl">
-    <property name="alias" value="/bookshelf" />
-  </instance>
+    </component>
+
+    <instance component="com.packt.felixguide.bookshelf.servlet.BookshelfServletImpl">
+        <property name="alias" value="/bookshelf"/>
+    </instance>
 </ipojo>

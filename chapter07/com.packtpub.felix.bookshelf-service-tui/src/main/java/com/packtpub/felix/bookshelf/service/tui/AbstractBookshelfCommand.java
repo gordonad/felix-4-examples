@@ -1,13 +1,11 @@
 package com.packtpub.felix.bookshelf.service.tui;
 
+import com.packtpub.felix.bookshelf.service.api.BookshelfService;
 import org.apache.felix.shell.Command;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import com.packtpub.felix.bookshelf.service.api.BookshelfService;
-
-public abstract class AbstractBookshelfCommand implements Command
-{
+public abstract class AbstractBookshelfCommand implements Command {
     private BundleContext context;
 
     public AbstractBookshelfCommand(BundleContext context) {

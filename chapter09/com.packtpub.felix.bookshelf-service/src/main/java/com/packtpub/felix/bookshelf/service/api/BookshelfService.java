@@ -1,24 +1,23 @@
 package com.packtpub.felix.bookshelf.service.api;
 
-import java.util.Set;
-
 import com.packtpub.felix.bookshelf.inventory.api.Book;
 import com.packtpub.felix.bookshelf.inventory.api.BookAlreadyExistsException;
 import com.packtpub.felix.bookshelf.inventory.api.BookNotFoundException;
 import com.packtpub.felix.bookshelf.inventory.api.InvalidBookException;
 
-public interface BookshelfService extends Authentication
-{
+import java.util.Set;
+
+public interface BookshelfService extends Authentication {
     Set<String> getCategories(String sessionId);
 
     void addBook(String session, String isbn, String title, String author, String category,
-                    int rating) throws BookAlreadyExistsException, InvalidBookException;
+                 int rating) throws BookAlreadyExistsException, InvalidBookException;
 
     void modifyBookCategory(String session, String isbn, String category)
-                    throws BookNotFoundException, InvalidBookException;
+            throws BookNotFoundException, InvalidBookException;
 
     void modifyBookRating(String session, String isbn, int rating) throws BookNotFoundException,
-                    InvalidBookException;
+            InvalidBookException;
 
     void removeBook(String session, String isbn) throws BookNotFoundException;
 

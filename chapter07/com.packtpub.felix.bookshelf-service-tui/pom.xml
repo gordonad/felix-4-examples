@@ -47,9 +47,10 @@
                     <instructions>
                         <Bundle-Category>sample</Bundle-Category>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Bundle-Activator>com.packtpub.felix.bookshelf.service.tui.BookshelfTUIActivator</Bundle-Activator>
+                        <Bundle-Activator>com.packtpub.felix.bookshelf.service.tui.BookshelfTUIActivator
+                        </Bundle-Activator>
                     </instructions>
-                    <obrRepository>file:///code/projects/felixbook/dev</obrRepository>
+                    <obrRepository>file:///code/felixbook/dev</obrRepository>
                 </configuration>
             </plugin>
         </plugins>

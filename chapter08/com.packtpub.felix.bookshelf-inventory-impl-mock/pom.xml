@@ -9,49 +9,49 @@
         <version>4.0.0</version>
     </parent>
 
-  <artifactId>com.packtpub.felix.bookshelf.ch08.inventory-impl-mock</artifactId>
-  <packaging>bundle</packaging>
+    <artifactId>com.packtpub.felix.bookshelf.ch08.inventory-impl-mock</artifactId>
+    <packaging>bundle</packaging>
 
-  <name>Felix 4.0 | 08 | Bookshelf Inventory Mock Impl</name>
+    <name>Felix 4.0 | 08 | Bookshelf Inventory Mock Impl</name>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.packtpub.felix</groupId>
-      <artifactId>com.packtpub.felix.ch04.bookshelf-inventory-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.packtpub.felix</groupId>
+            <artifactId>com.packtpub.felix.ch04.bookshelf-inventory-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-Category>sample</Bundle-Category>
-            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-            <Export-Package>com.packtpub.felix.bookshelf.inventory.impl.mock
-            </Export-Package>
-          </instructions>
-          <obrRepository>file:///code/projects/felixbook/dev</obrRepository>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-ipojo-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>ipojo-bundle</goal>
-            </goals>
-            <configuration>
-              <metadata>src/main/ipojo/meta.xml</metadata>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Category>sample</Bundle-Category>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>com.packtpub.felix.bookshelf.inventory.impl.mock
+                        </Export-Package>
+                    </instructions>
+                    <obrRepository>file:///code/felixbook/dev</obrRepository>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-ipojo-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>ipojo-bundle</goal>
+                        </goals>
+                        <configuration>
+                            <metadata>src/main/ipojo/meta.xml</metadata>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

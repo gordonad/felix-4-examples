@@ -1,38 +1,40 @@
 package com.packtpub.felix.bookshelf.service.tui;
 
-import java.io.PrintStream;
-
+import com.packtpub.felix.bookshelf.service.api.BookshelfService;
+import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
 import org.apache.commons.exec.CommandLine;
 import org.osgi.framework.BundleContext;
 
-import com.packtpub.felix.bookshelf.service.api.BookshelfService;
-import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
+import java.io.PrintStream;
 
-public class AddBookCommand extends AbstractBookshelfCommand
-{
+public class AddBookCommand extends AbstractBookshelfCommand {
     public AddBookCommand(BundleContext context) {
         super(context);
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return "book-add";
     }
 
-    public String getShortDescription() {
+    @Override
+	public String getShortDescription() {
         return "Add a book to the bookshelf";
     }
 
-    public String getUsage() {
+    @Override
+	public String getUsage() {
         return "book-add <user> <pass> <isbn> <title> <author> <category> <rating>";
     }
 
-    public void execute(String command, PrintStream out, PrintStream err) {
+    @Override
+	public void execute(String command, PrintStream out, PrintStream err) {
         CommandLine line = CommandLine.parse(command);
-        int len = line.getArguments().length; 
+        int len = line.getArguments().length;
         if (len != 7) {
             throw new InvalidCommandAttributesRuntimeException("Got "
-                            + len
-                            + " arguments, expecting 7");
+                    + len
+                    + " arguments, expecting 7");
         }
 
         String username = line.getArguments()[0];
@@ -44,10 +46,9 @@ public class AddBookCommand extends AbstractBookshelfCommand
         int rating;
         try {
             rating = Integer.parseInt(line.getArguments()[6]);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new InvalidCommandAttributesRuntimeException(
-                "Expecting integer rating, got '"+line.getArguments()[6]+"'");
+                    "Expecting integer rating, got '" + line.getArguments()[6] + "'");
         }
 
         BookshelfService service = lookupService();
@@ -55,16 +56,14 @@ public class AddBookCommand extends AbstractBookshelfCommand
         String session;
         try {
             session = service.login(username, password.toCharArray());
-        }
-        catch (InvalidCredentialsException e) {
+        } catch (InvalidCredentialsException e) {
             err.println("Invalid credentials");
             return;
         }
 
         try {
             service.addBook(session, isbn, title, author, category, rating);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             err.println(e.getMessage());
             return;
         }

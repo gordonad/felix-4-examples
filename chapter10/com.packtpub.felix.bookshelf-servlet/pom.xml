@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
+            <artifactId>com.springsource.javax.servlet</artifactId>
         </dependency>
         <dependency>
             <groupId>com.packtpub.felix</groupId>

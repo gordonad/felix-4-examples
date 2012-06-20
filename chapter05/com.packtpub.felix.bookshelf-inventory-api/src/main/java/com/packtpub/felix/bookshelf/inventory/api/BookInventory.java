@@ -3,24 +3,35 @@ package com.packtpub.felix.bookshelf.inventory.api;
 import java.util.Map;
 import java.util.Set;
 
-public interface BookInventory
-{
+public interface BookInventory {
 
     /**
      * Search criteria enum for the {@link BookInventory#searchBooks(Map)} method
      */
     enum SearchCriteria {
-        /** ISBN compare, use % at beginning or end of a criterion for wildcard. */
+        /**
+         * ISBN compare, use % at beginning or end of a criterion for wildcard.
+         */
         ISBN_LIKE,
-        /** Title compare, use % at beginning or end of a criterion for wildcard. */
+        /**
+         * Title compare, use % at beginning or end of a criterion for wildcard.
+         */
         TITLE_LIKE,
-        /** Author compare, use % at beginning or end of a criterion for wildcard. */
+        /**
+         * Author compare, use % at beginning or end of a criterion for wildcard.
+         */
         AUTHOR_LIKE,
-        /** CATEGORY compare, use % at beginning or end of a criterion for wildcard. */
+        /**
+         * CATEGORY compare, use % at beginning or end of a criterion for wildcard.
+         */
         CATEGORY_LIKE,
-        /** Rating compare, greater or equal to criterion */
+        /**
+         * Rating compare, greater or equal to criterion
+         */
         RATING_GT,
-        /** RATING compare, less than or equal to criterion */
+        /**
+         * RATING compare, less than or equal to criterion
+         */
         RATING_LT
     }
 
@@ -31,33 +42,29 @@ public interface BookInventory
 
     /**
      * Store a book. This is either a create or an update of existing
-     * 
-     * @throws InvalidBookException
-     *             if validation for an attribute has failed (e.g. mandatory attribute not set)
+     *
+     * @throws InvalidBookException if validation for an attribute has failed (e.g. mandatory attribute not set)
      */
     String storeBook(MutableBook book) throws InvalidBookException;
 
     /**
      * Load a previously stored book based on its ISBN, for read-only access.
-     * 
-     * @throws BookNotFoundException
-     *             if not found.
+     *
+     * @throws BookNotFoundException if not found.
      */
     Book loadBook(String isbn) throws BookNotFoundException;
 
     /**
      * Load a previously stored book based on its ISBN, for read-write access.
-     * 
-     * @throws BookNotFoundException
-     *             if not found.
+     *
+     * @throws BookNotFoundException if not found.
      */
     MutableBook loadBookForEdit(String isbn) throws BookNotFoundException;
 
     /**
      * Removes a previously stored book based on its ISBN.
-     * 
-     * @throws BookNotFoundException
-     *             if not found.
+     *
+     * @throws BookNotFoundException if not found.
      */
     void removeBook(String isbn) throws BookNotFoundException;
 
@@ -66,6 +73,8 @@ public interface BookInventory
      */
     Set<String> searchBooks(Map<SearchCriteria, String> criteria);
 
-    /** Get the list the book categories. */
+    /**
+     * Get the list the book categories.
+     */
     Set<String> getCategories();
 }

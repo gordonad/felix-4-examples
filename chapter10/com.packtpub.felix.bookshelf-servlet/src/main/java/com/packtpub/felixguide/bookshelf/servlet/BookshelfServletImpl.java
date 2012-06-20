@@ -1,22 +1,19 @@
 package com.packtpub.felixguide.bookshelf.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.packtpub.felix.bookshelf.inventory.api.Book;
+import com.packtpub.felix.bookshelf.inventory.api.BookNotFoundException;
+import com.packtpub.felix.bookshelf.service.api.BookshelfService;
+import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
+import org.osgi.service.log.LogService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import org.osgi.service.log.LogService;
-
-import com.packtpub.felix.bookshelf.inventory.api.Book;
-import com.packtpub.felix.bookshelf.inventory.api.BookNotFoundException;
-import com.packtpub.felix.bookshelf.service.api.BookshelfService;
-import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
-
-public class BookshelfServletImpl extends HttpServlet
-{
+public class BookshelfServletImpl extends HttpServlet {
     private static final long serialVersionUID = 8205151771705101745L;
 
     private String alias;
@@ -64,8 +61,9 @@ public class BookshelfServletImpl extends HttpServlet
     public BookshelfServletImpl() {
     }
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-                    java.io.IOException {
+    @Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+            java.io.IOException {
         String op = req.getParameter(PARAM_OP);
         debug("op = " + op + ", session = " + this.session);
         if (OP_LOGIN.equals(op)) {
@@ -74,56 +72,45 @@ public class BookshelfServletImpl extends HttpServlet
             try {
                 doLogin(user, pass);
                 htmlMainPage(resp.getWriter());
-            }
-            catch (InvalidCredentialsException e) {
+            } catch (InvalidCredentialsException e) {
                 htmlLoginForm(resp.getWriter(), e.getMessage());
             }
             return;
-        }
-        else if (OP_LOGINFORM.equals(op) || !sessionIsValid()) {
+        } else if (OP_LOGINFORM.equals(op) || !sessionIsValid()) {
             htmlLoginForm(resp.getWriter(), null);
             return;
         }
 
         if (op == null) {
             htmlMainPage(resp.getWriter());
-        }
-        else if (OP_CATEGORIES.equals(op)) {
+        } else if (OP_CATEGORIES.equals(op)) {
             try {
                 htmlCategories(resp.getWriter());
-            }
-            catch (InvalidCredentialsException e) {
+            } catch (InvalidCredentialsException e) {
                 resp.getWriter().write(e.getMessage());
             }
-        }
-        else if (OP_BYCATEGORY.equals(op)) {
+        } else if (OP_BYCATEGORY.equals(op)) {
             String category = req.getParameter(PARAM_CATEGORY);
             try {
                 htmlByCategory(resp.getWriter(), category);
-            }
-            catch (InvalidCredentialsException e) {
+            } catch (InvalidCredentialsException e) {
                 resp.getWriter().write(e.getMessage());
             }
-        }
-        else if (OP_BYAUTHOR.equals(op)) {
+        } else if (OP_BYAUTHOR.equals(op)) {
             String author = req.getParameter(PARAM_AUTHOR);
             try {
                 htmlByAuthor(resp.getWriter(), author);
-            }
-            catch (InvalidCredentialsException e) {
+            } catch (InvalidCredentialsException e) {
                 resp.getWriter().write(e.getMessage());
                 this.session = null;
             }
-        }
-        else if (OP_ADDBOOKFORM.equals(op)) {
+        } else if (OP_ADDBOOKFORM.equals(op)) {
             htmlAddBookForm(resp.getWriter());
-        }
-        else if (OP_ADDBOOK.equals(op)) {
+        } else if (OP_ADDBOOK.equals(op)) {
             htmlTop(resp.getWriter());
             doAddBook(req, resp);
             htmlBottom(resp.getWriter());
-        }
-        else {
+        } else {
             htmlMainPage(resp.getWriter());
         }
     }
@@ -139,13 +126,13 @@ public class BookshelfServletImpl extends HttpServlet
     private void htmlLoginForm(PrintWriter printWriter, String errorMessage) {
         printWriter.println("<h3>Login</h3>");
 
-        if (errorMessage!=null) {
+        if (errorMessage != null) {
             printWriter.println("Login failed: " + errorMessage);
         }
         printWriter.println("<form method=\"get\" action=\"" + loginUrl() + "\">");
 
         printWriter.println("<input type=\"hidden\" name=\"" + PARAM_OP + "\" value=\"" + OP_LOGIN
-                        + "\">");
+                + "\">");
         printWriter.println("User: <input type=\"text\" name=\"" + PARAM_USER + "\"><br />");
         printWriter.println("Pass: <input type=\"password\" name=\"" + PARAM_PASS + "\"><br />");
 
@@ -166,7 +153,7 @@ public class BookshelfServletImpl extends HttpServlet
         printWriter.println("<td><a href=\"?\">Home</a></td>");
         printWriter.println("<td><a href=\"" + categoriesUrl() + "\">Browse by category</a></td>");
         printWriter.println("<td><a href=\"" + searchByAuthorUrl(null)
-                        + "\">Search by author</a></td>");
+                + "\">Search by author</a></td>");
         printWriter.println("<td><a href=\"" + addBookFormUrl() + "\">Add book</a></td>");
 
         printWriter.println("<tr>");
@@ -194,7 +181,7 @@ public class BookshelfServletImpl extends HttpServlet
         printWriter.println("<ul>");
         for (String category : this.service.getCategories(this.session)) {
             printWriter.println("<li><a href=\"" + browseByCategoryUrl(category) + "\">" + category
-                            + "</li>");
+                    + "</li>");
         }
         printWriter.println("</ul>");
 
@@ -206,23 +193,22 @@ public class BookshelfServletImpl extends HttpServlet
     }
 
     private void htmlByCategory(PrintWriter printWriter, String category)
-                    throws InvalidCredentialsException {
+            throws InvalidCredentialsException {
         htmlTop(printWriter);
 
         printWriter.println("<h3>In Category: " + category + "</h3>");
         if (category != null) {
             printWriter.println("<table border=\"1\">");
             printWriter
-                .println("<tr><th>ISBN</th><th>Rating</th><th>Title</th><th>Author</th></tr>");
+                    .println("<tr><th>ISBN</th><th>Rating</th><th>Title</th><th>Author</th></tr>");
             for (String isbn : this.service.searchBooksByCategory(this.session, category)) {
                 printWriter.println("<tr><td>" + isbn + "</td>");
                 Book book;
                 try {
                     book = this.service.getBook(this.session, isbn);
                     printWriter.println("<td>" + book.getRating() + "</td><td>" + book.getTitle()
-                                    + "</td><td>" + book.getAuthor() + "</td>");
-                }
-                catch (BookNotFoundException e) {
+                            + "</td><td>" + book.getAuthor() + "</td>");
+                } catch (BookNotFoundException e) {
                     printWriter.println("<td>-</td><td>" + e.getMessage() + "</td><td>-</td>");
                 }
 
@@ -237,14 +223,13 @@ public class BookshelfServletImpl extends HttpServlet
     private String searchByAuthorUrl(String author) {
         if (author == null) {
             return "?" + PARAM_OP + "=" + OP_BYAUTHOR;
-        }
-        else {
+        } else {
             return "?" + PARAM_OP + "=" + OP_BYAUTHOR + "&" + PARAM_AUTHOR + "=" + author;
         }
     }
 
     private void htmlByAuthor(PrintWriter printWriter, String author)
-                    throws InvalidCredentialsException {
+            throws InvalidCredentialsException {
         htmlTop(printWriter);
 
         printWriter.println("<h3>Search by author</h3>");
@@ -252,7 +237,7 @@ public class BookshelfServletImpl extends HttpServlet
         printWriter.println("<form method=\"get\" action=\"" + searchByAuthorUrl(null) + "\">");
 
         printWriter.println("<input type=\"hidden\" name=\"" + PARAM_OP + "\" value=\""
-                        + OP_BYAUTHOR + "\"");
+                + OP_BYAUTHOR + "\"");
         printWriter.println("<input type=\"text\" name=\"" + PARAM_AUTHOR + "\"");
         if (author != null) {
             printWriter.println(" value=\"" + author + "\"");
@@ -272,9 +257,8 @@ public class BookshelfServletImpl extends HttpServlet
                 try {
                     book = this.service.getBook(this.session, isbn);
                     printWriter.println("<td>" + book.getRating() + "</td><td>" + book.getTitle()
-                                    + "</td><td>" + book.getCategory() + "</td>");
-                }
-                catch (BookNotFoundException e) {
+                            + "</td><td>" + book.getCategory() + "</td>");
+                } catch (BookNotFoundException e) {
                     printWriter.println("<td>-</td><td>-</td><td>" + e.getMessage() + "</td>");
                 }
 
@@ -298,7 +282,7 @@ public class BookshelfServletImpl extends HttpServlet
         printWriter.println("<form method=\"get\" action=\"" + addBookUrl() + "\">");
 
         printWriter.println("<input type=\"hidden\" name=\"" + PARAM_OP + "\" value=\""
-                        + OP_ADDBOOK + "\">");
+                + OP_ADDBOOK + "\">");
         printWriter.println("ISBN: <input type=\"text\" name=\"" + PARAM_ISBN + "\"><br />");
         printWriter.println("Author: <input type=\"text\" name=\"" + PARAM_AUTHOR + "\"><br />");
         printWriter.println("Title: <input type=\"text\" name=\"" + PARAM_TITLE + "\"><br />");
@@ -322,16 +306,14 @@ public class BookshelfServletImpl extends HttpServlet
         int rating = 0;
         try {
             rating = Integer.parseInt(ratingStr);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             resp.getWriter().println(e.getMessage());
             return;
         }
 
         try {
             this.service.addBook(this.session, isbn, title, author, group, rating);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             resp.getWriter().println(e.getMessage());
             return;
         }

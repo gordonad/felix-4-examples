@@ -1,25 +1,19 @@
 package com.packtpub.felix.bookshelf.service.impl;
 
+import com.packtpub.felix.bookshelf.inventory.api.*;
+import com.packtpub.felix.bookshelf.inventory.api.BookInventory.SearchCriteria;
+import com.packtpub.felix.bookshelf.service.api.BookAlreadyExistsException;
+import com.packtpub.felix.bookshelf.service.api.BookshelfService;
+import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-
-import com.packtpub.felix.bookshelf.inventory.api.Book;
-import com.packtpub.felix.bookshelf.inventory.api.BookInventory;
-import com.packtpub.felix.bookshelf.inventory.api.BookNotFoundException;
-import com.packtpub.felix.bookshelf.inventory.api.InvalidBookException;
-import com.packtpub.felix.bookshelf.inventory.api.MutableBook;
-import com.packtpub.felix.bookshelf.inventory.api.BookInventory.SearchCriteria;
-import com.packtpub.felix.bookshelf.service.api.BookAlreadyExistsException;
-import com.packtpub.felix.bookshelf.service.api.BookshelfService;
-import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
-
-public class BookshelfServiceImpl implements BookshelfService
-{
+public class BookshelfServiceImpl implements BookshelfService {
     String session;
 
     BundleContext context;
@@ -36,7 +30,8 @@ public class BookshelfServiceImpl implements BookshelfService
         return (BookInventory) this.context.getService(ref);
     }
 
-    public String login(String username, char[] password) throws InvalidCredentialsException {
+    @Override
+	public String login(String username, char[] password) throws InvalidCredentialsException {
         if ("admin".equals(username) && Arrays.equals(password, "admin".toCharArray())) {
             this.session = Long.toString(System.currentTimeMillis());
             return this.session;
@@ -50,12 +45,14 @@ public class BookshelfServiceImpl implements BookshelfService
         }
     }
 
-    public void logout(String session) {
+    @Override
+	public void logout(String session) {
         checkSession(session);
         this.session = null;
     }
 
-    public Book getBook(String session, String isbn) throws BookNotFoundException {
+    @Override
+	public Book getBook(String session, String isbn) throws BookNotFoundException {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         return inv.loadBook(isbn);
@@ -67,58 +64,64 @@ public class BookshelfServiceImpl implements BookshelfService
         return inv.loadBookForEdit(isbn);
     }
 
-    public void addBook(String session, String isbn, String title, String author, String group,
-                    int grade) throws BookAlreadyExistsException, InvalidBookException {
+    @Override
+	public void addBook(String session, String isbn, String title, String author, String group,
+                        int grade) throws BookAlreadyExistsException, InvalidBookException {
         checkSession(session);
-        
+
         BookInventory inv = lookupBookInventory();
-        
+
         MutableBook book = inv.createBook(isbn);
         book.setTitle(title);
         book.setAuthor(author);
         book.setGroup(group);
         book.setGrade(grade);
-        
+
         inv.storeBook(book);
     }
 
-    public void modifyBookGroup(String session, String isbn, String group)
-                    throws BookNotFoundException, InvalidBookException {
+    @Override
+	public void modifyBookGroup(String session, String isbn, String group)
+            throws BookNotFoundException, InvalidBookException {
         checkSession(session);
-        
+
         BookInventory inv = lookupBookInventory();
-        
+
         MutableBook book = inv.loadBookForEdit(isbn);
         book.setGroup(group);
-        
+
         inv.storeBook(book);
     }
 
-    public void modifyBookGrade(String session, String isbn, int grade)
-                    throws BookNotFoundException, InvalidBookException {
+    @Override
+	public void modifyBookGrade(String session, String isbn, int grade)
+            throws BookNotFoundException, InvalidBookException {
         checkSession(session);
-        
+
         BookInventory inv = lookupBookInventory();
-        
+
         MutableBook book = inv.loadBookForEdit(isbn);
         book.setGrade(grade);
-        
+
         inv.storeBook(book);
     }
 
-    public Set<String> getGroups(String session) {
+    @Override
+	public Set<String> getGroups(String session) {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         return inv.getGroups();
     }
 
-    public void removeBook(String session, String isbn) throws BookNotFoundException {
+    @Override
+	public void removeBook(String session, String isbn) throws BookNotFoundException {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         inv.removeBook(isbn);
     }
 
-    public Set<String> searchBooksByAuthor(String session, String authorLike) {
+    @Override
+	public Set<String> searchBooksByAuthor(String session, String authorLike) {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         Map<SearchCriteria, String> crits = new HashMap<SearchCriteria, String>();
@@ -126,7 +129,8 @@ public class BookshelfServiceImpl implements BookshelfService
         return inv.searchBooks(crits);
     }
 
-    public Set<String> searchBooksByGroup(String session, String groupLike) {
+    @Override
+	public Set<String> searchBooksByGroup(String session, String groupLike) {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         Map<SearchCriteria, String> crits = new HashMap<SearchCriteria, String>();
@@ -134,7 +138,8 @@ public class BookshelfServiceImpl implements BookshelfService
         return inv.searchBooks(crits);
     }
 
-    public Set<String> searchBooksByTitle(String session, String titleLike) {
+    @Override
+	public Set<String> searchBooksByTitle(String session, String titleLike) {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         Map<SearchCriteria, String> crits = new HashMap<SearchCriteria, String>();
@@ -142,7 +147,8 @@ public class BookshelfServiceImpl implements BookshelfService
         return inv.searchBooks(crits);
     }
 
-    public Set<String> searchBooksByGrade(String session, int gradeLower, int gradeUpper) {
+    @Override
+	public Set<String> searchBooksByGrade(String session, int gradeLower, int gradeUpper) {
         checkSession(session);
         BookInventory inv = lookupBookInventory();
         Map<SearchCriteria, String> crits = new HashMap<SearchCriteria, String>();

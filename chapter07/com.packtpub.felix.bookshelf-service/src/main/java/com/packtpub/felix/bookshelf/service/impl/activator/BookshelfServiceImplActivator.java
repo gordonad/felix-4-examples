@@ -1,31 +1,31 @@
 package com.packtpub.felix.bookshelf.service.impl.activator;
 
-import java.util.Set;
-
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-
 import com.packtpub.felix.bookshelf.inventory.api.BookAlreadyExistsException;
 import com.packtpub.felix.bookshelf.inventory.api.BookNotFoundException;
 import com.packtpub.felix.bookshelf.inventory.api.InvalidBookException;
 import com.packtpub.felix.bookshelf.service.api.BookshelfService;
 import com.packtpub.felix.bookshelf.service.api.InvalidCredentialsException;
 import com.packtpub.felix.bookshelf.service.impl.BookshelfServiceImpl;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
-public class BookshelfServiceImplActivator implements BundleActivator
-{
+import java.util.Set;
+
+public class BookshelfServiceImplActivator implements BundleActivator {
     ServiceRegistration reg = null;
 
-    public void start(BundleContext context) throws Exception {
+    @Override
+	public void start(BundleContext context) throws Exception {
         this.reg = context.registerService(BookshelfService.class.getName(),
-            new BookshelfServiceImpl(context), null);
+                new BookshelfServiceImpl(context), null);
 
         testService(context);
     }
 
-    public void stop(BundleContext context) throws Exception {
+    @Override
+	public void stop(BundleContext context) throws Exception {
         if (this.reg != null) {
             context.ungetService(reg.getReference());
         }
@@ -44,8 +44,7 @@ public class BookshelfServiceImplActivator implements BundleActivator
         try {
             System.out.println("\nSigning in. . .");
             sessionId = service.login("admin", "admin".toCharArray());
-        }
-        catch (InvalidCredentialsException e) {
+        } catch (InvalidCredentialsException e) {
             e.printStackTrace();
             return;
         }
@@ -54,15 +53,13 @@ public class BookshelfServiceImplActivator implements BundleActivator
             System.out.println("\nAdding books. . .");
             service.addBook(sessionId, "123-4567890100", "Book 1 Title", "John Doe", "Group 1", 0);
             service
-                .addBook(sessionId, "123-4567890101", "Book 2 Title", "Will Smith", "Group 1", 0);
+                    .addBook(sessionId, "123-4567890101", "Book 2 Title", "Will Smith", "Group 1", 0);
             service.addBook(sessionId, "123-4567890200", "Book 3 Title", "John Doe", "Group 2", 0);
             service.addBook(sessionId, "123-4567890201", "Book 4 Title", "Jane Doe", "Group 2", 0);
-        }
-        catch (BookAlreadyExistsException e) {
+        } catch (BookAlreadyExistsException e) {
             e.printStackTrace();
             return;
-        }
-        catch (InvalidBookException e) {
+        } catch (InvalidBookException e) {
             e.printStackTrace();
             return;
         }
@@ -74,8 +71,7 @@ public class BookshelfServiceImplActivator implements BundleActivator
         for (String isbn : results) {
             try {
                 System.out.println(" - " + service.getBook(sessionId, isbn));
-            }
-            catch (BookNotFoundException e) {
+            } catch (BookNotFoundException e) {
                 System.err.println(e.getMessage());
             }
         }
